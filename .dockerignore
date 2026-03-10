@@ -1,0 +1,13 @@
+# Docker ignore file
+.git
+.gitignore
+README.md
+.env
+.vscode
+.idea
+*.log
+*.tmp
+node_modules
+vendor
+composer.lock
+package-lock.json

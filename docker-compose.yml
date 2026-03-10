@@ -1,0 +1,71 @@
+version: '3.8'
+
+services:
+  # MySQL Database Service
+  database:
+    image: mysql:8.0
+    container_name: phplogin_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: phplogin
+      MYSQL_USER: phplogin_user
+      MYSQL_PASSWORD: phplogin_pass
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./config/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+    networks:
+      - phplogin_network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  # PHP Apache Web Service
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: phplogin_web
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - phplogin_network
+    environment:
+      - DB_HOST=database
+      - DB_NAME=phplogin
+      - DB_USER=phplogin_user
+      - DB_PASS=phplogin_pass
+
+  # phpMyAdmin Service (Optional)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phplogin_phpmyadmin
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: database
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: root
+    depends_on:
+      - database
+    networks:
+      - phplogin_network
+
+networks:
+  phplogin_network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
