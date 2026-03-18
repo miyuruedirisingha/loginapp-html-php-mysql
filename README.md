@@ -108,3 +108,10 @@ chmod +x deploy.sh
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Containerization**: Docker, Docker Compose
 - **CI/CD**: Jenkins Pipeline
+
+## 📚 Documentation
+
+- **[DOCKER.md](DOCKER.md)** - Docker setup and commands
+- **[EC2-DEPLOYMENT.md](EC2-DEPLOYMENT.md)** - AWS EC2 deployment guide
+- **[JENKINS-SETUP.md](JENKINS-SETUP.md)** - Jenkins CI/CD configuration
+- **[DEPLOYMENT-CHECKLIST.md](DEPLOYMENT-CHECKLIST.md)** - Pre-deployment checklist
